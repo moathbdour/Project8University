@@ -11,6 +11,7 @@ using Project8.Models;
 namespace Project8.Controllers
 {
     [Authorize(Roles = "Admin")]
+
     public class TransactionsController : Controller
     {
         private Project8Entities db = new Project8Entities();
@@ -19,9 +20,21 @@ namespace Project8.Controllers
         public ActionResult Index()
         {
             var transactions = db.Transactions.Include(t => t.AspNetUser);
+            ViewBag.x = "Transactions";
+
             return View(transactions.ToList());
         }
+        [HttpPost]
+        public ActionResult Index(string search5)
+        {
+            if (search5 != null)
+            {
+                var abumahmood = db.Transactions.Where(x => x.FullName.Contains(search5)).ToList();
+                return View(abumahmood);
+            }
 
+            return View(db.Transactions.ToList());
+        }
         // GET: Transactions/Details/5
         public ActionResult Details(int? id)
         {
@@ -34,6 +47,8 @@ namespace Project8.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.x = "Transactions";
+
             return View(transaction);
         }
 

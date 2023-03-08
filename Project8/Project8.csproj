@@ -180,6 +180,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MajorsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\OurDoctorsController.cs" />
     <Compile Include="Controllers\RegistrationPeriodsController.cs" />
     <Compile Include="Controllers\semestersController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
@@ -260,20 +261,6 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Coimg\1 %281%29.jpg" />
-    <Content Include="Coimg\1 %282%29.jpg" />
-    <Content Include="Coimg\1 %283%29.jpg" />
-    <Content Include="Coimg\9 %281%29.jpg" />
-    <Content Include="Coimg\9 %281%29.png" />
-    <Content Include="Coimg\9 %282%29.jpg" />
-    <Content Include="Coimg\9 %282%29.png" />
-    <Content Include="Coimg\abet.jpg" />
-    <Content Include="Coimg\chemical.jpg" />
-    <Content Include="Coimg\cit.jpg" />
-    <Content Include="Coimg\civil.jpg" />
-    <Content Include="Coimg\Eng.jpg" />
-    <Content Include="Coimg\med.jpg" />
-    <Content Include="Coimg\ph.jpg" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -369,6 +356,7 @@
     <Content Include="img\client_2.png" />
     <Content Include="img\client_3.png" />
     <Content Include="img\client_4.png" />
+    <Content Include="img\edu1-removebg-preview.png" />
     <Content Include="img\gal_img_full_1.jpg" />
     <Content Include="img\gal_img_full_2.jpg" />
     <Content Include="img\gal_img_full_3.jpg" />
@@ -381,8 +369,10 @@
     <Content Include="img\img_sm_2.jpg" />
     <Content Include="img\img_sm_3.jpg" />
     <Content Include="img\img_sm_4.jpg" />
+    <Content Include="img\j.jpg" />
     <Content Include="img\logo%402x.png" />
     <Content Include="img\logo.png" />
+    <Content Include="img\logo3.png" />
     <Content Include="img\person_1.jpg" />
     <Content Include="img\person_2.jpg" />
     <Content Include="img\person_3.jpg" />
@@ -390,10 +380,12 @@
     <Content Include="img\person_5.jpg" />
     <Content Include="img\person_6.jpg" />
     <Content Include="img\person_7.jpg" />
+    <Content Include="img\profile.jpg" />
     <Content Include="img\slider_1.jpg" />
     <Content Include="img\slider_2.jpg" />
     <Content Include="img\slider_3.jpg" />
     <Content Include="img\slider_4.jpg" />
+    <Content Include="img\uuuu.jpg" />
     <Content Include="index.html" />
     <Content Include="js\custom.js" />
     <Content Include="js\main.js" />
@@ -488,6 +480,12 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="scss\style.scss" />
@@ -540,18 +538,20 @@
     <Content Include="Views\Home\Collages.cshtml" />
     <Content Include="Views\Home\Majors.cshtml" />
     <Content Include="Views\Home\singleMajor.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\Errors.cshtml" />
     <Content Include="Views\Manage\Registration.cshtml" />
     <Content Include="Views\Manage\schedule.cshtml" />
-    <Content Include="Views\Manage\Errors.cshtml" />
+    <Content Include="Views\OurDoctors\Create.cshtml" />
+    <Content Include="Views\OurDoctors\Delete.cshtml" />
+    <Content Include="Views\OurDoctors\Details.cshtml" />
+    <Content Include="Views\OurDoctors\Edit.cshtml" />
+    <Content Include="Views\OurDoctors\Index.cshtml" />
+    <Content Include="Views\Home\DoctorsResults.cshtml" />
+    <Content Include="Views\Home\Change.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Highschool\" />
     <Folder Include="Images\" />
     <Folder Include="Views\dashboard_layout\" />
     <Folder Include="Views\Default\" />

@@ -24,7 +24,9 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Doctor_Image)
+            @*@Html.DisplayFor(model => model.Doctor_Image)*@
+            <img style="height:250px; width:250px" src="../../Images/@Html.DisplayFor(modelItem => Model.Doctor_Image)" />
+
         </dd>
 
         <dt>

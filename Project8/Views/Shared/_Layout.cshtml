@@ -16,6 +16,7 @@
       <script src="js/vendor/html5shiv.min.js"></script>
       <script src="js/vendor/respond.min.js"></script>
     <![endif]-->
+
 </head>
 <body>
 
@@ -27,27 +28,26 @@
     </div>
 
         <!-- Fixed navbar -->
-
-        <div class="probootstrap-header-top">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-9 col-md-9 col-sm-9 probootstrap-top-quick-contact-info">
-                        <span><i class="icon-location2"></i>Brooklyn, NY 10036, United States</span>
-                        <span><i class="icon-phone2"></i>+1-123-456-7890</span>
-                        <span><i class="icon-mail"></i>info@probootstrap.com</span>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 probootstrap-top-social">
-                        <ul>
-                            <li><a href="#"><i class="icon-twitter"></i></a></li>
-                            <li><a href="#"><i class="icon-facebook2"></i></a></li>
-                            <li><a href="#"><i class="icon-instagram2"></i></a></li>
-                            <li><a href="#"><i class="icon-youtube"></i></a></li>
-                            <li><a href="#" class="probootstrap-search-icon js-probootstrap-search"><i class="icon-search"></i></a></li>
-                        </ul>
+        @*<div class="probootstrap-header-top">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-9 col-md-9 col-sm-9 probootstrap-top-quick-contact-info">
+                            <span><i class="icon-location2"></i>Brooklyn, NY 10036, United States</span>
+                            <span><i class="icon-phone2"></i>+1-123-456-7890</span>
+                            <span><i class="icon-mail"></i>info@probootstrap.com</span>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 probootstrap-top-social">
+                            <ul>
+                                <li><a href="#"><i class="icon-twitter"></i></a></li>
+                                <li><a href="#"><i class="icon-facebook2"></i></a></li>
+                                <li><a href="#"><i class="icon-instagram2"></i></a></li>
+                                <li><a href="#"><i class="icon-youtube"></i></a></li>
+                                <li><a href="#" class="probootstrap-search-icon js-probootstrap-search"><i class="icon-search"></i></a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div>*@
         <nav class="navbar navbar-default probootstrap-navbar">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -60,7 +60,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html" title="ProBootstrap:Enlight">Enlight</a>
+                    <a class="navbar-brand" style="background-image:url('/img/logo3.png');background-size:contain;" href="/Home/Index" title="ProBootstrap:Enlight">Melano</a>
                 </div>
 
                 <div id="navbar-collapse" class="navbar-collapse collapse">
@@ -69,29 +69,38 @@
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
                         <li>@Html.ActionLink("About", "About", "Home")</li>
                         <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                        <li><a href="courses.html">Courses</a></li>
-                        <li><a href="teachers.html">Teachers</a></li>
-                        <li><a href="events.html">Events</a></li>
-                        <li class="dropdown">
-                            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Pages</a>
-                            <ul class="dropdown-menu">
-                                <li>@Html.ActionLink("About", "About", "Home")</li>
-                                <li><a href="courses.html">Courses</a></li>
-                                <li><a href="course-single.html">Course Single</a></li>
-                                <li><a href="gallery.html">Gallery</a></li>
-                                <li class="dropdown-submenu dropdown">
-                                    <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span>Sub Menu</span></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Second Level Menu</a></li>
-                                        <li><a href="#">Second Level Menu</a></li>
-                                        <li><a href="#">Second Level Menu</a></li>
-                                        <li><a href="#">Second Level Menu</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href="news.html">News</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="/Home/Collages">Collages</a></li>
+                        <li>@Html.ActionLink("Schedule", "Schedule", "Manage")</li>
+
+                        <li>@Html.ActionLink("Doctors", "Index", "OurDoctors")</li>
+                        @if (Context.User.IsInRole("Student"))
+                        {
+                            <li><a href="/Manage/Registration">Registration</a></li>
+                        }
+                        @if (Context.User.IsInRole("Doctor"))
+                        {
+                            <li><a href="/Home/DoctorsResults">Marks</a></li>
+                        }
+
+                        @*<li class="dropdown">
+            <a href="#" data-toggle="dropdown" class="dropdown-toggle">Pages</a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("About", "About", "Home")</li>
+                <li><a href="courses.html">Courses</a></li>
+                <li><a href="course-single.html">Course Single</a></li>
+                <li><a href="gallery.html">Gallery</a></li>
+                <li class="dropdown-submenu dropdown">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle"><span>Sub Menu</span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Second Level Menu</a></li>
+                        <li><a href="#">Second Level Menu</a></li>
+                        <li><a href="#">Second Level Menu</a></li>
+                        <li><a href="#">Second Level Menu</a></li>
+                    </ul>
+                </li>
+                <li><a href="news.html">News</a></li>
+            </ul>
+        </li>*@
                     </ul>
 
                 </div>
@@ -114,28 +123,28 @@
 
 
         @*<div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="more options">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="more options">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                            <li>@Html.ActionLink("About", "About", "Home")</li>
+                            <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                        </ul>
+                        @Html.Partial("_LoginPartial")
+                    </div>
                 </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    </ul>
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </div>*@
+            </div>*@
         <div class="">
             @RenderBody()
-            
+            <hr />
 
 
             <footer class="probootstrap-footer probootstrap-bg">
@@ -143,16 +152,16 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="probootstrap-footer-widget">
-                                <h3>About The School</h3>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro provident suscipit natus a cupiditate ab minus illum quaerat maxime inventore Ea consequatur consectetur hic provident dolor ab aliquam eveniet alias</p>
+                                <h3>About The University</h3>
+                                <p>To deliver high caliber education and provide professional services that contribute to the progress of knowledge and the development of local communities and humanity. As technology continues to evolve, we will provide scientific and technological environments that are conducive to excellence.</p>
                                 <h3>Social</h3>
                                 <ul class="probootstrap-footer-social">
-                                    <li><a href="#"><i class="icon-twitter"></i></a></li>
-                                    <li><a href="#"><i class="icon-facebook"></i></a></li>
-                                    <li><a href="#"><i class="icon-github"></i></a></li>
-                                    <li><a href="#"><i class="icon-dribbble"></i></a></li>
-                                    <li><a href="#"><i class="icon-linkedin"></i></a></li>
-                                    <li><a href="#"><i class="icon-youtube"></i></a></li>
+                                    <li><a href="https://www.twitter.com/justedujo"><i class="icon-twitter"></i></a></li>
+                                    <li><a href="https://www.facebook.com/pages/JUST-University/633721593348542?ref=hl"><i class="icon-facebook"></i></a></li>
+                                    @*<li><a href="#"><i class="icon-github"></i></a></li>*@
+                                    @*<li><a href="#"><i class="icon-dribbble"></i></a></li>*@
+                                    <li><a href="https://www.linkedin.com/edu/school?id=192021&trk=hp-feed-school-name"><i class="icon-linkedin"></i></a></li>
+                                    <li><a href="https://www.youtube.com/channel/UCVLYZ-9I6nTA8-WgergKF0g"><i class="icon-youtube"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -160,11 +169,10 @@
                             <div class="probootstrap-footer-widget">
                                 <h3>Links</h3>
                                 <ul>
-                                    <li><a href="#">Home</a></li>
-                                    <li><a href="#">Courses</a></li>
-                                    <li><a href="#">Teachers</a></li>
-                                    <li><a href="#">News</a></li>
-                                    <li><a href="#">Contact</a></li>
+                                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                                    <li><a href="/Home/Collages">Collages</a></li>
+                                    <li>@Html.ActionLink("Doctors", "Index", "OurDoctors")</li>
+                                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                                 </ul>
                             </div>
                         </div>
@@ -172,9 +180,13 @@
                             <div class="probootstrap-footer-widget">
                                 <h3>Contact Info</h3>
                                 <ul class="probootstrap-contact-info">
-                                    <li><i class="icon-location2"></i> <span>198 West 21th Street, Suite 721 New York NY 10016</span></li>
-                                    <li><i class="icon-mail"></i><span>info@domain.com</span></li>
-                                    <li><i class="icon-phone2"></i><span>+123 456 7890</span></li>
+                                    <li>
+                                        <i class="icon-location2"></i> <span>
+                                            Melan                                            P.O.Box 3030, Irbid 22110, Jordan
+                                        </span>
+                                    </li>
+                                    <li><i class="icon-mail"></i><span>public@just.edu.jo</span></li>
+                                    <li><i class="icon-phone2"></i><span>+962 2 7201000</span></li>
                                 </ul>
                             </div>
                         </div>
@@ -188,7 +200,7 @@
                     <div class="container">
                         <div class="row">
                             <div class="col-md-8 text-left">
-                                <p>&copy; 2017 <a href="https://probootstrap.com/">ProBootstrap:Enlight</a>. All Rights Reserved. Designed &amp; Developed with <i class="icon icon-heart"></i> by <a href="https://probootstrap.com/">ProBootstrap.com</a></p>
+                                <p>&copy; 2023 <a href="https://probootstrap.com/"></a>. All Rights Reserved. <i class="icon icon-heart"></i>  <a href="https://probootstrap.com/"></a></p>
                             </div>
                             <div class="col-md-4 probootstrap-back-to-top">
                                 <p><a href="#" class="js-backtotop">Back to top <i class="icon-arrow-long-up"></i></a></p>

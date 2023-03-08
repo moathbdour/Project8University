@@ -20,6 +20,7 @@ namespace Project8.Models
         {
             this.Majors = new HashSet<Major>();
         }
+
         [Required]
         [Display(Name = "College Name")]
         public int College_Id { get; set; }
@@ -32,7 +33,7 @@ namespace Project8.Models
         [Required]
         [Display(Name = "College Image")]
         public string College_Image { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Major> Majors { get; set; }
     }

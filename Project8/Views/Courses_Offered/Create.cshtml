@@ -7,10 +7,10 @@
 
 <h2>Create</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Courses_Offered</h4>
         <hr />
@@ -26,7 +26,9 @@
         <div class="form-group">
             @Html.LabelFor(model => model.start_time, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.start_time, new { htmlAttributes = new { @class = "form-control" } })
+                <input type="number" max="24" min="1" name="start_Hour" id="start_Hour" placeholder="Hour" class="form-control" />
+                <br>
+                <input type="number" max="60" min="0" name="start_min" id="start_min" placeholder="Minute" class="form-control" />
                 @Html.ValidationMessageFor(model => model.start_time, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -34,7 +36,11 @@
         <div class="form-group">
             @Html.LabelFor(model => model.end_time, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.end_time, new { htmlAttributes = new { @class = "form-control" } })
+
+                <input type="number" max="24" min="1" name="end_Hour" id="end_Hour" placeholder="Hour" class="form-control" />
+                <br />
+                <input type="number" max="60" min="0" name="end_min" id="end_min" placeholder="Minute" class="form-control" />
+
                 @Html.ValidationMessageFor(model => model.end_time, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -97,7 +103,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-primary" style="float:right;" />
             </div>
         </div>
     </div>
@@ -106,3 +112,14 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@if (TempData["swal_message"] != null)
+{
+    <script>
+    swal({
+      title: "@ViewBag.title",
+      text: "@TempData["swal_message"]",
+      icon: "@ViewBag.icon"
+    });
+    </script>
+}

@@ -10,6 +10,8 @@ using Project8.Models;
 
 namespace Project8.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class CollegesController : Controller
     {
         private Project8Entities db = new Project8Entities();
@@ -17,6 +19,20 @@ namespace Project8.Controllers
         // GET: Colleges
         public ActionResult Index()
         {
+            ViewBag.x = "Colleges";
+
+            return View(db.Colleges.ToList());
+        }
+
+        [HttpPost]
+        public ActionResult Index(string search5)
+        {
+            if (search5 != null)
+            {
+                var abumahmood = db.Colleges.Where(x => x.College_Name.Contains(search5)).ToList();
+                return View(abumahmood);
+            }
+
             return View(db.Colleges.ToList());
         }
 
@@ -32,12 +48,16 @@ namespace Project8.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.x = "Colleges";
+
             return View(college);
         }
 
         // GET: Colleges/Create
         public ActionResult Create()
         {
+            ViewBag.x = "Colleges";
+
             return View();
         }
 
@@ -75,6 +95,8 @@ namespace Project8.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.x = "Colleges";
+
             return View(college);
         }
 
@@ -121,6 +143,8 @@ namespace Project8.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.x = "Colleges";
+
             return View(college);
         }
 

@@ -4,6 +4,18 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+@section Search{
+
+    @using (Html.BeginForm("Index", "Courses_Offered", FormMethod.Post, new { @class = "form-search", role = "form", style = "width:800px" }))
+    {
+
+        <input class="form-control mr-sm-2" type="text" name="search5" id="search5" placeholder="Search ..." aria-label="Search" style="width:80%;background-color:transparent;border:none;">
+        @*@Html.ActionLink("Search", "Search", "AspNetUsers", " ", new { @class = "search-close" })*@
+        <button class="btn btn-primary" type="submit" value="search" style="z-index:5;"><i class="fa fa-search"></i></button>
+        <button class="search-close"><i class="fa fa-close"></i></button>
+    }
+
+}
 
 <h2>Courses_Offered</h2>
 
@@ -45,44 +57,45 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.start_time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.end_time)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Seat_Count)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Hall)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Capacity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Registered)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cours.Course_Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Doctor.Doctor_Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.semester.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Day.Days)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.offered_id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.offered_id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.offered_id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.start_time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.end_time)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seat_Count)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hall)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Capacity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Registered)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cours.Course_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doctor.Doctor_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.semester.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Day.Days)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.offered_id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.offered_id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.offered_id })
+            </td>
+        </tr>
+    }
 
 </table>

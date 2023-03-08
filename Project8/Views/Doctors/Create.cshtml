@@ -11,7 +11,7 @@
 @using (Html.BeginForm("Create", "Doctors", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Doctor</h4>
         <hr />
@@ -48,11 +48,17 @@
             </div>
         </div>
 
-        
+        <div class="form-group">
+            <label class="control-label col-md-2" for="Doctor_Password">Doctor Password</label>
+            <div class="col-md-10">
+                <input class="form-control text-box single-line" data-val="true" data-val-email="The Doctor Email field is not a valid e-mail address." data-val-required="The Doctor Email field is required." id="Doctor_Password" name="Doctor_Password" type="password" value="" />
+                <span class="field-validation-valid text-danger" data-valmsg-for="Doctor_Password" data-valmsg-replace="true"></span>
+            </div>
+        </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-primary" style="float:right;" />
             </div>
         </div>
     </div>
@@ -61,7 +67,17 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@if (TempData["swal_message"] != null)
+{
+    <script>
+    swal({
+      title: "@ViewBag.title",
+      text: "@TempData["swal_message"]",
+      icon: "@ViewBag.icon"
+    });
+    </script>
+}
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

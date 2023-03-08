@@ -39,7 +39,7 @@ namespace Project8.Models
         public string UserName { get; set; }
         public string user_image { get; set; }
         public string Id_Image { get; set; }
-        public Nullable<int> National_Number { get; set; }
+        public string National_Number { get; set; }
         public string HighSchool_Image { get; set; }
         public Nullable<double> HighSchool_Avg { get; set; }
         public string First_Name { get; set; }

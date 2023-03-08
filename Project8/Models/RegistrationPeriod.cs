@@ -11,14 +11,19 @@ namespace Project8.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class RegistrationPeriod
     {
         public int id { get; set; }
         public Nullable<int> semester_id { get; set; }
+        [Required]
+        [Display(Name = "Start Date")]
         public Nullable<System.DateTime> start_date { get; set; }
+        [Required]
+        [Display(Name = "End Date")]
         public Nullable<System.DateTime> end_date { get; set; }
-    
+
         public virtual semester semester { get; set; }
     }
 }

@@ -4,7 +4,18 @@
     ViewBag.Title = "Transactions";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+@section Search{
 
+    @using (Html.BeginForm("Index", "Transactions", FormMethod.Post, new { @class = "form-search", role = "form", style = "width:800px" }))
+    {
+
+        <input class="form-control mr-sm-2" type="text" name="search5" id="search5" placeholder="Search ..." aria-label="Search" style="width:80%;background-color:transparent;border:none;">
+        @*@Html.ActionLink("Search", "Search", "AspNetUsers", " ", new { @class = "search-close" })*@
+        <button class="btn btn-primary" type="submit" value="search" style="z-index:5;"><i class="fa fa-search"></i></button>
+        <button class="search-close"><i class="fa fa-close"></i></button>
+    }
+
+}
 <h2>Transactions</h2>
 
 <p>
@@ -17,7 +28,7 @@
         <th>
             @Html.DisplayNameFor(model => model.FullName)
         </th>
-        
+
         <th>
             @Html.DisplayNameFor(model => model.User_Action)
         </th>
@@ -30,42 +41,42 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model)
-{
-    <tr>
-        <td> 
-            @Html.DisplayFor(modelItem => item.Transaction_Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FullName)
-        </td>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Transaction_Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FullName)
+            </td>
 
-        <td>
-            @{
-                if (item.User_Action == true) 
-                {<span>Deposit</span> }
-                else 
-                {<span>Deduction</span> }
+            <td>
+                @{
+                    if (item.User_Action == true)
+                    {<span>Deposit</span> }
+                    else
+                    {<span>Deduction</span> }
 
-            }
-        </td>
-        <td>
-            @{ 
-                if (item.User_Action == true)
-                {<span>+@Html.DisplayFor(modelItem => item.Amount)</span>  }
-            
-                else 
+                }
+            </td>
+            <td>
+                @{
+                    if (item.User_Action == true)
+                    {<span>+@Html.DisplayFor(modelItem => item.Amount)</span> }
+
+                else
                 {<span>-@Html.DisplayFor(modelItem => item.Amount)</span> }
 
-            }
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AspNetUser.Email)
-        </td>
-        <td>
-            @Html.ActionLink("Details", "Details", new { id=item.Transaction_Id }) 
-        </td>
-    </tr>
-}
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AspNetUser.Email)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.Transaction_Id })
+            </td>
+        </tr>
+    }
 
 </table>

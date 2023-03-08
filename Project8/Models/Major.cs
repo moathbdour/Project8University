@@ -21,7 +21,7 @@ namespace Project8.Models
             this.AspNetUsers = new HashSet<AspNetUser>();
             this.Courses = new HashSet<Cours>();
         }
-    
+
         public int Major_Id { get; set; }
         [Required]
         [Display(Name = "Name")]
@@ -34,7 +34,7 @@ namespace Project8.Models
         public string Major_Image { get; set; }
         public Nullable<int> Price { get; set; }
         public Nullable<int> College_Id { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AspNetUser> AspNetUsers { get; set; }
         public virtual College College { get; set; }

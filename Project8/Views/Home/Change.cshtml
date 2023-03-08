@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewBag.Title = "Change";
+    ViewBag.x = "Status Change";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+<div>
+    <h2>Change status to Paid</h2>
+    <br />
+    <form method="post">
+        <h5>Clicking this button will change the status of all enrollments from "not paid" to "paid". Additionally, a transaction record will be added to the database for each registered student,<br /> deducting the appropriate amount of fees for the enrolled course(s). The deduction amount will be calculated by multiplying the number of course hours by the student's hourly price.</h5>
+        <br /> <label>Change the status now</label><br />
+        @if (ViewBag.message == "yes")
+        {
+            <button type="submit" class="btn btn-danger" name="change" value="change">Change now</button>}
+        else
+        {
+            <button disabled type="submit" name="change" value="change">Change now</button>
+        }
+    </form>
+
+</div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@if (TempData["swal_message"] != null)
+{
+    <script>
+    swal({
+      title: "@ViewBag.title",
+      text: "@TempData["swal_message"]",
+      icon: "@ViewBag.icon"
+    });
+    </script>
+}

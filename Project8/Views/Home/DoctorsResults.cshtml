@@ -1,0 +1,162 @@
+﻿@{
+}
+<div class="container">
+    <h2>Students Marks</h2>
+    @if (ViewBag.message == "no")
+    {
+        <form method="get">
+
+            <select id="courseid" name="courseid" class="form-control">
+                <option>Select a Course</option>
+                @foreach (var item in Model)
+                {
+                    <option value="@item.offered_id">@item.Cours.Course_Name // @item.start_time--@item.end_time</option>
+
+
+                }
+            </select>
+    <br />
+            <button type="submit" class="btn btn-success ">Choose</button>
+        </form> }
+    else
+    {
+        <form method="get">
+
+            <select id="courseid" name="courseid" class="form-control">
+                <option>Select a Course</option>
+                @foreach (var item in Model.d)
+                {
+
+                    if (item.course_id.ToString() == ViewBag.message)
+                    {
+                        <option selected value="@item.offered_id">@item.Cours.Course_Name // @item.start_time--@item.end_time</option>
+                    }
+                    else
+                    {
+                        <option value="@item.offered_id">@item.Cours.Course_Name // @item.start_time--@item.end_time</option>
+                    }
+
+
+
+                }
+            </select>
+            <br />
+            <button type="submit" class="btn btn-success">Choose</button>
+        </form>
+
+
+        @*<script>
+                function saveMarks() {
+
+                    var enrollments = [];
+                    let inputs = document.querySelectorAll('input[type="number"]'); // select all number inputs
+
+                          inputs.forEach(input => { // loop through the inputs
+                              let enrollment = {}; // define an empty object
+                              enrollment.Enrollment_Id = input.name; // add the input name to the object
+                              enrollment.Course_mark = input.value; // add the input value to the object
+                              enrollments.push(enrollment); // push the object to the array
+
+
+                          });
+
+
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/Home/DoctorsResults",
+                        data: JSON.stringify(enrollments),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            // Handle the response from the server
+                        },
+                        error: function (response) {
+                            console.log(response);
+                        }
+                    }); event.preventDefault();
+                }
+                //function saveMarks() {
+
+                //    var enrollments = [];
+                //
+
+                //    inputs.forEach(input => { // loop through the inputs
+                //        let obj = {}; // define an empty object
+                //        obj.enrollmentId = input.name; // add the input name to the object
+                //        obj.courseMark = input.value; // add the input value to the object
+                //        enrollments.push(obj); // push the object to the array
+                //    });
+                //    $.ajax({
+                //        type: "POST",
+                //        url: "/Home/DoctorsResults",
+                //        data: JSON.stringify(enrollments),
+                //        contentType: "application/json; charset=utf-8",
+                //        dataType: "json",
+                //        success: function (response) {
+                //            // Handle the response from the server
+                //            console.log(response);
+                //        },
+                //        error: function (response) {
+                //            // Handle the error
+                //            console.log(response);
+                //        }
+
+                //    });
+                //    event.preventDefault();
+
+                //}
+            </script>*@
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        if (TempData["swal_message"] != null)
+        {
+            <script>
+    swal({
+      title: "@ViewBag.title",
+      text: "@TempData["swal_message"]",
+      icon: "@ViewBag.icon"
+    });
+            </script>
+        }
+        <form method="post">
+
+            <div class="table-stats order-table ov-h">
+                <table class="table ">
+                    <thead>
+                        <tr>
+
+                            <th class="avatar">Student Name</th>
+                            <th>Student Emal</th>
+
+                            <th>Student Mark</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int index = 0;
+                        }
+                        @foreach (var item in Model.e)
+                        {
+                            <tr>
+                                <td>@item.AspNetUser.First_Name @item.AspNetUser.Last_Name</td>
+                                <td>@item.AspNetUser.Email</td>
+
+                                <td width="50"><input type="number" min="0" max="100" class="form-control"  value="@item.Course_mark" name="enrollments[@index].Course_mark" placeholder="@item.Course_mark" /><input name="enrollments[@index].Enrollment_Id" value="@item.Enrollment_Id" hidden /></td>
+
+                            </tr>
+                            index++;
+                        }
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-danger">Save Changes</button>
+            </div>
+
+
+        </form>
+
+
+
+    }
+</div>

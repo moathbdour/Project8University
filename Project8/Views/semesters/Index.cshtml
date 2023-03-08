@@ -4,7 +4,18 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+@section Search{
 
+    @using (Html.BeginForm("Index", "semesters", FormMethod.Post, new { @class = "form-search", role = "form", style = "width:800px" }))
+    {
+
+        <input class="form-control mr-sm-2" type="text" name="search5" id="search5" placeholder="Search ..." aria-label="Search" style="width:80%;background-color:transparent;border:none;">
+        @*@Html.ActionLink("Search", "Search", "AspNetUsers", " ", new { @class = "search-close" })*@
+        <button class="btn btn-primary" type="submit" value="search" style="z-index:5;"><i class="fa fa-search"></i></button>
+        <button class="search-close"><i class="fa fa-close"></i></button>
+    }
+
+}
 <h2>Semsters</h2>
 
 <p>
@@ -24,23 +35,24 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.start_date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.end_date)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.start_date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.end_date)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.id })
+            </td>
+        </tr>
+    }
 
 </table>

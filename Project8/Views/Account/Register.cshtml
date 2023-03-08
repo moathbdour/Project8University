@@ -3,80 +3,130 @@
     ViewBag.Title = "Register";
 }
 
-<h2>@ViewBag.Title.</h2>
+<style>
+    .form-control {
+        width: 70%;
+        background-color: #ddd;
+    }
+</style>
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+<div class="container body-content" style="margin-top:20px; background-image:url('/Coimg/nsr.png'); background-size:cover;  border-radius: 20px; overflow: hidden;">
+
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary("", new { @class = "text-danger" })
+        <div class="container">
+            <div class="box" style=" padding: 50px; justify-content: space-between; width: 100%; max-width: 800px; margin: auto;  color:black;">
+                <h4 style="text-align: center; margin-top:-5%;">Create a new account.</h4>
+                <div class="form-horizontal">
+                    <div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                            <div class="col-md-10">
+                                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Email">First Name</label>
+                            <div class="col-md-10">
+                                <input class="form-control" data-val="true" data-val-required="The First Name field is required." id="firstName" name="firstName" type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Email">Last Name</label>
+                            <div class="col-md-10">
+                                <input class="form-control" data-val="true" data-val-required="The Last Name field is required." id="lastName" name="lastName" type="text" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Email">ID Image</label>
+                            <div class="col-md-10">
+                                <input class="form-control" accept="image/*" data-val="true" data-val-required="The ID Image field is required." id="idImage" name="idImage" type="file" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Email">User Image</label>
+                            <div class="col-md-10">
+                                <input class="form-control" accept="image/*" data-val="true" data-val-required="The User Image field is required." id="userImage" name="userImage" type="file" value="" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Email">National Number</label>
+                            <div class="col-md-10">
+                                <input class="form-control" data-val="true" data-val-required="The National Number field is required." id="nationalNumber" name="nationalNumber" type="text" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Email">High School Avg</label>
+                            <div class="col-md-10">
+                                <input class="form-control" data-val="true" data-val-required="The high School AVG field is required." max="100" min="50" id="avg" name="avg" type="number" value="50" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label" for="Email">High School Degree</label>
+                            <div class="col-md-10">
+                                <input class="form-control" data-val="true" data-val-required="The High Degree field is required." accept=".pdf" id="highschooldegree" name="highschooldegree" type="file" value="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Register" class="btn btn-lg btn-warning" style="width: 70%; background-color: #49d292; border-color: #49d292; border-radius: 10px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); text-transform: uppercase; letter-spacing: 2px; color: #fff; font-size: 1.2rem; font-weight: bold; padding: 12px; transition: all 0.3s ease-in-out; margin-top: 20px;" />
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    }
+
+</div>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+@if (TempData["swal_message"] != null)
 {
-    @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
-    <hr />
-    @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label" for="Email">First Name</label>
-        <div class="col-md-10">
-            <input class="form-control" data-val="true" data-val-required="The First Name field is required."   id="firstName" name="firstName" type="text"  />
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label" for="Email">Last Name</label>
-        <div class="col-md-10">
-            <input class="form-control"  data-val="true"  data-val-required="The Last Name field is required."  id="lastName" name="lastName" type="text" value="" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label" for="Email">ID Image</label>
-        <div class="col-md-10">
-            <input class="form-control" accept="image/*" data-val="true" data-val-required="The ID Image field is required."    id="idImage" name="idImage" type="file" value="" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label" for="Email">User Image</label>
-        <div class="col-md-10">
-            <input class="form-control" accept="image/*" data-val="true" data-val-required="The User Image field is required." id="userImage" name="userImage" type="file" value="" />
-        </div>
-    </div>
-    
-    <div class="form-group">
-        <label class="col-md-2 control-label" for="Email">National Number</label>
-        <div class="col-md-10">
-            <input class="form-control"  data-val="true"  data-val-required="The National Number field is required."  id="nationalNumber" name="nationalNumber" type="text" value="" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label" for="Email">High School Avg</label>
-        <div class="col-md-10">
-            <input class="form-control" data-val="true"  data-val-required="The high School AVG field is required." id="avg" name="avg" type="text" value="" />
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label" for="Email">High School Degree</label>
-        <div class="col-md-10">
-            <input class="form-control" data-val="true" data-val-required="The High Degree field is required." accept="image/*" id="highschooldegree" name="highschooldegree" type="file" value="" />
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
-        </div>
-    </div>
+    <script>
+    swal({
+      title: "@ViewBag.title",
+      text: "@TempData["swal_message"]",
+      icon: "@ViewBag.icon"
+
+    })
+        .then(function() {
+      window.location.href = "@Url.Action("Index", "Home")";
+    });
+    </script>
+}
+
+@if (TempData["flag"] != null)
+{
+    <script>
+        swal({
+            title: "@ViewBag.title",
+            text: "@TempData["swal_message"]",
+            icon: "@ViewBag.icon"
+
+        });
+
+
+
+    </script>
 }
 
 @section Scripts {

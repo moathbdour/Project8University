@@ -13,6 +13,8 @@ using Project8.Models;
 
 namespace Project8.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class AspNetUsersController : Controller
     {
         private Project8Entities db = new Project8Entities();
@@ -22,15 +24,51 @@ namespace Project8.Controllers
         {     
 
             var aspNetUsers = db.AspNetUsers.Include(a => a.Major);
+            ViewBag.x= "AspNetUsers";
             return View(aspNetUsers.ToList());
         }
+        //[HttpPost]
+        //public ActionResult Index(string search5)
+        //{
+        //    if (search5 != null)
+        //    {
+        //        var abumahmood = db.AspNetUsers.Where(x => x.Email.Contains(search5)).ToList();
+        //        return View(abumahmood);
+        //    }
+
+        //    var aspNetUsers = db.AspNetUsers.Include(a => a.Major);
+        //    return View(aspNetUsers.ToList());
+        //}
+
         [HttpPost]
-        public ActionResult Index(string search5)
+
+        public ActionResult Index(string search5, string filter)
         {
+
+            if (filter == "1")
+            {
+                var ss = db.AspNetUsers.Where(x => x.IsAccepted == false).ToList();
+                return View(ss);
+
+            }
+            else if (filter == "2")
+            {
+                var ss = db.AspNetUsers.Where(x => x.IsAccepted == true).ToList();
+                return View(ss);
+            }
+            else if (filter == "3")
+            {
+                var ss = db.AspNetUsers.ToList();
+                return View(ss);
+            }
+            else if (filter == "4")
+            {
+                var ss = db.AspNetUsers.Where(x => x.IsAccepted == null).ToList();
+                return View(ss);
+            }
             if (search5 != null)
             {
                 var abumahmood = db.AspNetUsers.Where(x => x.Email.Contains(search5)).ToList();
-
                 return View(abumahmood);
             }
 
@@ -50,6 +88,8 @@ namespace Project8.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.x = "AspNetUsers";
+
             return View(aspNetUser);
         }
 
@@ -110,6 +150,7 @@ namespace Project8.Controllers
             ViewBag.Major_Id = new SelectList(db.Majors, "Major_Id", "Major_Name", aspNetUser.Major_Id);
             return View(aspNetUser);
         }
+        
         public ActionResult Accept(string id) {
             var student = db.AspNetUsers.Find(id);
             student.IsAccepted = true;
@@ -122,7 +163,7 @@ namespace Project8.Controllers
             db.SaveChanges();
             MailMessage mail = new MailMessage();
             mail.To.Add(student.Email);
-            mail.From = new MailAddress("jaberfahd2233@gmail.com");
+            mail.From = new MailAddress("projectnvc99@gmail.com");
             mail.Subject = "Accept";
 
             mail.Body = "Wellcom";
@@ -133,7 +174,7 @@ namespace Project8.Controllers
             smtp.EnableSsl = true;
             smtp.UseDefaultCredentials = false;
             smtp.Host = "smtp.gmail.com";
-            smtp.Credentials = new System.Net.NetworkCredential("jaberfahd2233", "obsrmfoexbukaspu");
+            smtp.Credentials = new System.Net.NetworkCredential("projectnvc99", "cbhcmnlhnosyinag");
             smtp.Send(mail);
             return View("Index",db.AspNetUsers.ToList());
         }
@@ -144,7 +185,7 @@ namespace Project8.Controllers
             db.SaveChanges();
             MailMessage mail = new MailMessage();
             mail.To.Add(student.Email);
-            mail.From = new MailAddress("jaberfahd2233@gmail.com");
+            mail.From = new MailAddress("projectnvc99@gmail.com");
             mail.Subject = "Reject";
 
             mail.Body = "Wellcom";
@@ -155,7 +196,7 @@ namespace Project8.Controllers
             smtp.EnableSsl = true;
             smtp.UseDefaultCredentials = false;
             smtp.Host = "smtp.gmail.com";
-            smtp.Credentials = new System.Net.NetworkCredential("jaberfahd2233", "obsrmfoexbukaspu");
+            smtp.Credentials = new System.Net.NetworkCredential("projectnvc99", "cbhcmnlhnosyinag");
             smtp.Send(mail);
             return View("Index", db.AspNetUsers.ToList());
         }

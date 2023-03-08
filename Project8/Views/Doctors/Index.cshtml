@@ -4,6 +4,18 @@
     ViewBag.Title = "Doctors";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+@section Search{
+
+    @using (Html.BeginForm("Index", "Doctors", FormMethod.Post, new { @class = "form-search", role = "form", style = "width:800px" }))
+    {
+
+        <input class="form-control mr-sm-2" type="text" name="search5" id="search5" placeholder="Search ..." aria-label="Search" style="width:80%;background-color:transparent;border:none;">
+        @*@Html.ActionLink("Search", "Search", "AspNetUsers", " ", new { @class = "search-close" })*@
+        <button class="btn btn-primary" type="submit" value="search" style="z-index:5;"><i class="fa fa-search"></i></button>
+        <button class="search-close"><i class="fa fa-close"></i></button>
+    }
+
+}
 <style>
     .imgthumbnail {
         z-index: 999999;
@@ -36,33 +48,34 @@
         <th>
             @Html.DisplayNameFor(model => model.Doctor_Email)
         </th>
-       
+
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Doctor_Name)
-        </td>
-        <td>
-            <img style="height:50px; width:50px" class="imgthumbnail" src="../Images/@Html.DisplayFor(modelItem => item.Doctor_Image)" />
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doctor_Name)
+            </td>
+            <td>
+                <img style="height:50px; width:50px" class="imgthumbnail" src="../Images/@Html.DisplayFor(modelItem => item.Doctor_Image)" />
 
-            
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Doctor_Phone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Doctor_Email)
-        </td>
-        
-        <td>
-            @*@Html.ActionLink("Edit", "Edit", new { id=item.Doctor_Id }) |*@
-            @Html.ActionLink("Details", "Details", new { id=item.Doctor_Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Doctor_Id })
-        </td>
-    </tr>
-}
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doctor_Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Doctor_Email)
+            </td>
+
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id=item.Doctor_Id }) |*@
+                @Html.ActionLink("Details", "Details", new { id = item.Doctor_Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Doctor_Id })
+            </td>
+        </tr>
+    }
 
 </table>

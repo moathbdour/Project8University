@@ -22,6 +22,8 @@ namespace Project8.Controllers
             ViewBag.All = db.AspNetUsers.Count(x => x.IsAccepted == true || x.IsAccepted == false);
             ViewBag.MyMoney = db.Transactions.Count(x => x.User_Action == false);
             ViewBag.Money = db.Transactions.Where(x=>x.User_Action==false).Sum(x => x.Amount);
+            ViewBag.x = "Statistics";
+
             return View();
         }
         public ActionResult CreatePie()

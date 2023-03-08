@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -71,7 +72,7 @@ namespace Project8.Controllers
         {
             if (!ModelState.IsValid)
             {
-                
+              
 
                 return View(model);
             }
@@ -80,9 +81,15 @@ namespace Project8.Controllers
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
-            {       
+            {    
+                
                 case SignInStatus.Success:
-                  
+                    var us = db.AspNetUsers.Where(x => x.Email == model.Email).FirstOrDefault();
+                    var rol = db.AspNetUserRoles.Where(y => y.UserId == us.Id).FirstOrDefault();
+                    if (Convert.ToInt32(rol.RoleId) == 1 )
+                    {
+                        return RedirectToAction("Index", "Statistics");
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -141,9 +148,11 @@ namespace Project8.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
-        public ActionResult Register( int majid)
+        public ActionResult Register(int? majid)
         {
-            Session["token"] = majid;
+            if (majid == null) { return RedirectToAction("Index", "Home"); }
+
+            Session["MajorId"] = majid;
             return View();
         }
 
@@ -152,60 +161,88 @@ namespace Project8.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model, string firstName,string lastName, HttpPostedFileBase idImage, HttpPostedFileBase userImage, int nationalNumber, float avg, HttpPostedFileBase highschooldegree)
+        public async Task<ActionResult> Register(RegisterViewModel model, string firstName, string lastName, HttpPostedFileBase idImage, HttpPostedFileBase userImage, string nationalNumber, float avg, HttpPostedFileBase highschooldegree)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+
+                string input = nationalNumber;
+                bool isValid = ValidateJordanianNumber(nationalNumber);
+                if (isValid)
                 {
-                    Guid guid1 = Guid.NewGuid();
-                    Guid guid2 = Guid.NewGuid();
-                    Guid guid3 = Guid.NewGuid();
-                    string y = firstName;
-                    string id = db.AspNetUsers.Where(a => a.Email == model.Email).Select(a => a.Id).FirstOrDefault();
-                    var student = db.AspNetUsers.Find(id);
-                    student.First_Name = firstName;
-                    student.Last_Name = lastName;
-                    student.Id_Image = guid1 + "-" + idImage.FileName;
-                    string idpath = guid1 +"-"+ idImage.FileName;
-                    idImage.SaveAs(Server.MapPath("../Images/" + idpath));
-                    student.National_Number = nationalNumber;
-                    student.user_image =guid2+"-"+ userImage.FileName;
-                    string userpath = guid2 +"-"+ userImage.FileName;
-                    userImage.SaveAs(Server.MapPath("../Images/" + userpath));
-                    student.HighSchool_Avg = avg;
-                    student.HighSchool_Image =guid3+"-"+ highschooldegree.FileName;
-                    string degreepath = guid3 + "-" + highschooldegree.FileName;
-                    highschooldegree.SaveAs(Server.MapPath("../Images/"+ degreepath));
-                    student.Balance = 0;
-                    student.Major_Id =Convert.ToInt32( Session["token"]);
-                    
-                    db.SaveChanges();
-                    var role = new AspNetUserRole();
-                    role.UserId = id;
-                    role.RoleId = "3";
-                    db.AspNetUserRoles.Add(role);
-                    db.SaveChanges();
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        Guid guid1 = Guid.NewGuid();
+                        Guid guid2 = Guid.NewGuid();
+                        Guid guid3 = Guid.NewGuid();
+                        string y = firstName;
+                        string id = db.AspNetUsers.Where(a => a.Email == model.Email).Select(a => a.Id).FirstOrDefault();
+                        var student = db.AspNetUsers.Find(id);
+                        student.First_Name = firstName;
+                        student.Last_Name = lastName;
+                        student.Id_Image = guid1 + "-" + idImage.FileName;
+                        string idpath = guid1 + "-" + idImage.FileName;
+                        idImage.SaveAs(Server.MapPath("../Images/" + idpath));
+                        student.National_Number = nationalNumber;
+                        student.user_image = guid2 + "-" + userImage.FileName;
+                        string userpath = guid2 + "-" + userImage.FileName;
+                        userImage.SaveAs(Server.MapPath("../Images/" + userpath));
+                        student.HighSchool_Avg = avg;
+                        student.HighSchool_Image = guid3 + "-" + highschooldegree.FileName;
+                        string degreepath = guid3 + "-" + highschooldegree.FileName;
+                        highschooldegree.SaveAs(Server.MapPath("../Highschool/" + degreepath));
+                        student.Balance = 0;
+                        student.Major_Id = Convert.ToInt32(Session["MajorId"]);
+
+                        db.SaveChanges();
+
+                        TempData["swal_message"] = $"Your request has been submitted and we will email you our respond";
+                        ViewBag.title = "Done";
+                        ViewBag.icon = "success";
+
+                        var role = new AspNetUserRole();
+                        role.UserId = id;
+                        role.RoleId = "3";
+                        db.AspNetUserRoles.Add(role);
+                        db.SaveChanges();
+                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    }
+
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    //return RedirectToAction("Index", "Home");
+                    AddErrors(result);
                 }
-                AddErrors(result);
+                else
+                {
+                    TempData["flag"] = "true";
+
+                    TempData["swal_message"] = $"Please enter a jordanian national number ";
+                    ViewBag.title = "Error";
+                    ViewBag.icon = "error";
+                    return View();
+                }
+
+
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
+        static bool ValidateJordanianNumber(string number)
+        {
+            string pattern = @"^([9][0-9]{2}[12][0][0-9]{5})|([2][0]{2}[0-9]{7})$";
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(number);
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]

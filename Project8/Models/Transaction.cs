@@ -17,7 +17,7 @@ namespace Project8.Models
         public int Transaction_Id { get; set; }
         public Nullable<System.DateTime> Transaction_Date { get; set; }
         public string FullName { get; set; }
-        public Nullable<int> CardNumber { get; set; }
+        public string CardNumber { get; set; }
         public Nullable<int> CVC { get; set; }
         public Nullable<System.DateTime> Visa_ExpireDate { get; set; }
         public Nullable<bool> User_Action { get; set; }

@@ -4,11 +4,22 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
+@section Search{
 
+    @using (Html.BeginForm("Index", "Cours", FormMethod.Post, new { @class = "form-search", role = "form", style = "width:800px" }))
+    {
+
+        <input class="form-control mr-sm-2" type="text" name="search5" id="search5" placeholder="Search ..." aria-label="Search" style="width:80%;background-color:transparent;border:none;">
+        @*@Html.ActionLink("Search", "Search", "AspNetUsers", " ", new { @class = "search-close" })*@
+        <button class="btn btn-primary" type="submit" value="search" style="z-index:5;"><i class="fa fa-search"></i></button>
+        <button class="search-close"><i class="fa fa-close"></i></button>
+    }
+
+}
 <h2>Courses</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create" , new {@class="btn btn-dark"})
 </p>
 <table class="table">
     <tr>
@@ -28,37 +39,66 @@
             @Html.DisplayNameFor(model => model.Major.Major_Name)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Cours1.Course_Name)
+            Required Course
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Course_Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Number_Of_Hours)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Course_Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.syllabus)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Major.Major_Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Cours1.Course_Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Course_Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Course_Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Course_Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Course_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Number_Of_Hours)
+            </td>
+            <td>
+                @{
+                    if (item.Course_Description.Length > 150)
+                    {
+                        string max = item.Course_Description.Substring(0, 150);
+                        string[] x=max.Split(' ');
+                        string sentence = "";
+                        for (int i=0; i < x.Length-1; i++)  
+                        { sentence = sentence+" "+ x[i]; }
+                        <span>@sentence</span>
+                    }
+                    else
+                    { @Html.DisplayFor(modelItem => item.Course_Description)
+                }
+
+                }
+            </td>
+            <td>
+                @{
+                    if (item.Course_Description.Length > 150)
+                    {
+                        string max = item.syllabus.Substring(0, 150);
+                        string[] x = max.Split(' ');
+                        string sentence = "";
+                        for (int i = 0; i < x.Length - 1; i++)
+                        { sentence = sentence + " " + x[i]; }
+                        <span>@sentence</span>
+                    }
+                    else
+                    { @Html.DisplayFor(modelItem => item.syllabus)
+                }
+
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Major.Major_Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cours1.Course_Name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Course_Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Course_Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Course_Id })
+            </td>
+        </tr>
+    }
 
 </table>

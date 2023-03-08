@@ -10,6 +10,8 @@ using Project8.Models;
 
 namespace Project8.Controllers
 {
+    [Authorize(Roles = "Admin")]
+
     public class CoursController : Controller
     {
         private Project8Entities db = new Project8Entities();
@@ -18,7 +20,20 @@ namespace Project8.Controllers
         public ActionResult Index()
         {
             var courses = db.Courses.Include(c => c.Major).Include(c => c.Cours1);
+            ViewBag.x = "Cours";
+
             return View(courses.ToList());
+        }
+        [HttpPost]
+        public ActionResult Index(string search5)
+        {
+            if (search5 != null)
+            {
+                var abumahmood = db.Courses.Where(x => x.Course_Name.Contains(search5)).ToList();
+                return View(abumahmood);
+            }
+
+            return View(db.Courses.ToList());
         }
 
         // GET: Cours/Details/5
@@ -33,6 +48,8 @@ namespace Project8.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.x = "Cours";
+
             return View(cours);
         }
 
@@ -40,11 +57,9 @@ namespace Project8.Controllers
         public ActionResult Create()
         {
             ViewBag.Major_Id = new SelectList(db.Majors, "Major_Id", "Major_Name");
-            //ViewBag.dependent_Course = new SelectList(db.Courses, "Course_Id", "Course_Name");
-            List<SelectListItem> courseList = new List<SelectListItem>();
-            courseList.Add(new SelectListItem { Text = "Select a course", Value = null });
-            courseList.AddRange(db.Courses.Select(c => new SelectListItem { Text = c.Course_Name, Value = c.Course_Id.ToString() }));
-            ViewBag.dependent_Course = new SelectList(courseList, "Value", "Text");
+            ViewBag.dependent_Course = new SelectList(db.Courses, "Course_Id", "Course_Name");
+            ViewBag.x = "Cours";
+
             return View();
         }
 
@@ -81,6 +96,8 @@ namespace Project8.Controllers
             }
             ViewBag.Major_Id = new SelectList(db.Majors, "Major_Id", "Major_Name", cours.Major_Id);
             ViewBag.dependent_Course = new SelectList(db.Courses, "Course_Id", "Course_Name", cours.dependent_Course);
+            ViewBag.x = "Cours";
+
             return View(cours);
         }
 
@@ -114,6 +131,8 @@ namespace Project8.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.x = "Cours";
+
             return View(cours);
         }
 

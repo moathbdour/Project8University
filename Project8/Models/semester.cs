@@ -11,7 +11,8 @@ namespace Project8.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class semester
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,12 +22,19 @@ namespace Project8.Models
             this.Enrollments = new HashSet<Enrollment>();
             this.RegistrationPeriods = new HashSet<RegistrationPeriod>();
         }
-    
+
         public int id { get; set; }
+        [Required]
+        [Display(Name = "Semester Name")]
         public string name { get; set; }
+        [Required]
+        [Display(Name = "Semester Start Date")]
         public Nullable<System.DateTime> start_date { get; set; }
+        [Required]
+        [Display(Name = "Semester End Date")]
+
         public Nullable<System.DateTime> end_date { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Courses_Offered> Courses_Offered { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

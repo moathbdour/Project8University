@@ -9,7 +9,15 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using Newtonsoft.Json.Schema;
 using Project8.Models;
+
+using System.Collections.Generic;
+using System.Data;
+
+using System.Web.Helpers;
+
+using System.Web.Services.Description;
 
 namespace Project8.Controllers
 {
@@ -69,7 +77,8 @@ namespace Project8.Controllers
                 : "";
             ViewBag.sender = "MyInformation";
             var userId = User.Identity.GetUserId();
-            var UserInfo = db.AspNetUsers.Where(x => x.Id == userId);
+            AspNetUser UserInfo = db.AspNetUsers.Find(userId);
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
@@ -80,7 +89,25 @@ namespace Project8.Controllers
 
 
             };
-            return View(UserInfo.FirstOrDefault());
+            string userid = User.Identity.GetUserId();
+            int current = 1;
+            var semisteres = db.semesters;
+            foreach (var semester in semisteres)
+            {
+                if (semester.end_date > DateTime.Now.Date && semester.start_date < DateTime.Now.Date)
+                {
+                    current = semester.id;
+
+                }
+            }
+            var currentregestered = db.Enrollments.Where(x => x.semester_id == current && x.Student_id == userid).Include(x => x.Courses_Offered.Cours).Include(x => x.Courses_Offered).ToList();
+
+            dynamic obj = new ExpandoObject();
+            obj.enroll = currentregestered;
+            var currUser = db.AspNetUsers.Where(x => x.Id == userid).ToList();
+            obj.user = currUser;
+            return View("Index", obj);
+
         }
 
         //
@@ -340,62 +367,113 @@ namespace Project8.Controllers
 
             base.Dispose(disposing);
         }
-        public ActionResult MyCourses()
-        {
-            var userId = User.Identity.GetUserId();
-            //var course = db.Enrollments.Where(x => x.Student_id == userId).ToList();
-            var ok = db.AspNetRoles.FirstOrDefault();
-            ViewBag.sender = "MyCourses";
+        //public ActionResult MyCourses()
+        //{
 
-            // Request a redirect to the external login provider to link a login for the current user
-            return View("index", ok);
-        }
+
+        //    // Request a redirect to the external login provider to link a login for the current user
+        //    return View("index");
+        //}
         //get
+        [Authorize(Roles = "Student")]
         public ActionResult Balance()
         {
             ViewBag.CurrentBalance = db.AspNetUsers.Find(User.Identity.GetUserId()).Balance;
+            var userId = User.Identity.GetUserId();
+            AspNetUser aspNetUser = db.AspNetUsers.Find(userId);
             ViewBag.sender = "Balance";
-            return View("index");
+            dynamic obj = new ExpandoObject();
+
+            var currUser = db.AspNetUsers.Where(x => x.Id == userId).ToList();
+            var trans = db.Transactions.ToList();
+            obj.user = currUser;
+            obj.transaction = trans;
+            return View("Index", obj);
+
         }
         public ActionResult ManageProfile()
         {
+            var userId = User.Identity.GetUserId();
+            AspNetUser aspNetUser = db.AspNetUsers.Find(userId);
+
             ViewBag.sender = "ManageProfile";
-            return View("index");
+            return View("index", aspNetUser);
         }
 
         public ActionResult Pay([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,user_image,Id_Image,National_Number,HighSchool_Image,HighSchool_Avg,First_Name,Last_Name,Major_Id,IsAccepted,Balance")] AspNetUser aspNetUser, string PayButton, string CardNumber, string CVC, string CardHolder)
         {
-            int CurrentBalance = Convert.ToInt32(db.AspNetUsers.Find(User.Identity.GetUserId()).Balance);
-            var balance = db.AspNetUsers.Find(User.Identity.GetUserId());
-            Transaction trans = new Transaction();
-            trans.Transaction_Date = DateTime.Now;
-            trans.UserId = User.Identity.GetUserId();
-            trans.Amount = Convert.ToInt32(PayButton);
-            trans.User_Action = true;
-            trans.CardNumber = Convert.ToInt32(CardNumber);
-            trans.CVC = Convert.ToInt32(CVC);
-            trans.FullName = CardHolder;
-            db.Transactions.Add(trans);
-            balance.Balance = Convert.ToInt32(PayButton) + CurrentBalance;
-            MailMessage mail = new MailMessage();
-            mail.To.Add(balance.Email);
-            mail.From = new MailAddress("jaberfahd2233@gmail.com");
-            mail.Subject = "Deposit";
+            //if (ModelState.IsValid)
+            //{
+                int CurrentBalance = Convert.ToInt32(db.AspNetUsers.Find(User.Identity.GetUserId()).Balance);
+                var balance = db.AspNetUsers.Find(User.Identity.GetUserId());
+                Transaction trans = new Transaction();
+                trans.Transaction_Date = DateTime.Now;
+                trans.UserId = User.Identity.GetUserId();
+                trans.Amount = Convert.ToInt32(PayButton);
+                trans.User_Action = true;
+                trans.CardNumber = CardNumber;
+                trans.CVC = Convert.ToInt32(CVC);
+                trans.FullName = CardHolder;
+                db.Transactions.Add(trans);
+                balance.Balance = Convert.ToInt32(PayButton) + CurrentBalance;
+                //MailMessage mail = new MailMessage();
+                //mail.To.Add(balance.Email);
+                //mail.From = new MailAddress("jaberfahd2233@gmail.com");
+                //mail.Subject = "Deposit";
 
-            mail.Body = $"We Recieved your payemnt of {PayButton} ";
-            mail.IsBodyHtml = true;
+                //mail.Body = $"We Recieved your payemnt of {PayButton} ";
+                //mail.IsBodyHtml = true;
 
-            SmtpClient smtp = new SmtpClient();
-            smtp.Port = 587;
-            smtp.EnableSsl = true;
-            smtp.UseDefaultCredentials = false;
-            smtp.Host = "smtp.gmail.com";
-            smtp.Credentials = new System.Net.NetworkCredential("jaberfahd2233", "obsrmfoexbukaspu");
-            smtp.Send(mail);
-            db.SaveChanges();
+                //SmtpClient smtp = new SmtpClient();
+                //smtp.Port = 587;
+                //smtp.EnableSsl = true;
+                //smtp.UseDefaultCredentials = false;
+                //smtp.Host = "smtp.gmail.com";
+                //smtp.Credentials = new System.Net.NetworkCredential("jaberfahd2233", "obsrmfoexbukaspu");
+                //smtp.Send(mail);
+                db.SaveChanges();
+                
+                    TempData["swal_message"] = $"Your payment done";
+                    ViewBag.title = "Done";
+                    ViewBag.icon = "success";
+                
+            
             ViewBag.CurrentBalance = db.AspNetUsers.Find(User.Identity.GetUserId()).Balance;
             ViewBag.sender = "Balance";
             return View("index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult ChangePhone([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,user_image,Id_Image,National_Number,HighSchool_Image,HighSchool_Avg,First_Name,Last_Name,Major_Id,IsAccepted,Balance")] AspNetUser aspNetUser, string PhoneNumber)
+        {
+
+            if (ModelState.IsValid)
+            {
+                string userd = User.Identity.GetUserId();
+                var uss = db.AspNetUsers.Where(x => x.Id == userd).FirstOrDefault();
+                uss.PhoneNumber = PhoneNumber;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            ViewBag.sender = "ManageProfile";
+            return View("index", aspNetUser);
+
+        }
+        public ActionResult ChangeEmail([Bind(Include = "Id,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName,user_image,Id_Image,National_Number,HighSchool_Image,HighSchool_Avg,First_Name,Last_Name,Major_Id,IsAccepted,Balance")] AspNetUser aspNetUser, string Email)
+        {
+
+            if (ModelState.IsValid)
+            {
+                string userd = User.Identity.GetUserId();
+                var uss = db.AspNetUsers.Where(x => x.Id == userd).FirstOrDefault();
+                uss.PhoneNumber = Email;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            return View("index", aspNetUser);
+
         }
         #region Helpers
         // Used for XSRF protection when adding external logins
@@ -437,6 +515,36 @@ namespace Project8.Controllers
             return false;
         }
         [Authorize(Roles = "Student")]
+        public ActionResult MyCourses()
+        {
+            string userid = User.Identity.GetUserId();
+            var logstudent = db.AspNetUsers.Find(userid);
+            int combalance = 9 * Convert.ToInt32(logstudent.Major.Price);
+            var semisteres = db.semesters;
+            int current = 1;
+            bool test = true;
+            foreach (var semester in semisteres)
+            {
+                if (semester.end_date > DateTime.Now.Date && semester.start_date < DateTime.Now.Date)
+                {
+                    current = semester.id;
+                    test = false;
+                }
+            }
+            if (test)
+            {
+                string Error1 = $"You are not in a semester .";
+                return RedirectToAction("Errors", new { Error = Error1 });
+            }
+
+            var currentregestered = db.Enrollments.Where(x => x.semester_id == current && x.Student_id == userid).Include(x => x.Courses_Offered.Cours).Include(x => x.Courses_Offered).ToList();
+            ViewBag.sender = "MyCourses";
+            dynamic obj = new ExpandoObject();
+            obj.enroll = currentregestered;
+            var currUser = db.AspNetUsers.Where(x => x.Id == userid).ToList();
+            obj.user = currUser;
+            return View("Index", obj);
+        }
         public ActionResult Registration()
         {
             string userid = User.Identity.GetUserId();
@@ -455,24 +563,25 @@ namespace Project8.Controllers
             }
             if (test)
             {
-                string Error1 = $"You should be in the registration period";
+                string Error1 = $"You are not in the registration period.";
                 return RedirectToAction("Errors", new { Error = Error1 });
             }
 
             var dates1 = db.RegistrationPeriods.First(x => x.semester_id == current);
             if (DateTime.Now.Date <= dates1.start_date && DateTime.Now.Date >= dates1.end_date)
             {
-                string Error1 = $"You should be in the registration period";
+                string Error1 = $"You are not in the registration period.";
                 return RedirectToAction("Errors", new { Error = Error1 });
 
             }
             if (logstudent.Balance < combalance)
             {
-                string Error = $"You dont have the min balance which is {combalance}";
+                string Error = $"Your current balance is less than the minimum required for registration, which is {combalance}";
                 return RedirectToAction("Errors", new { Error = Error });
             }
 
             var currentregestered = db.Enrollments.Where(x => x.semester_id == current && x.Student_id == userid).Include(x => x.Courses_Offered.Cours).Include(x => x.Courses_Offered).ToList();
+
             return View(currentregestered);
         }
 
@@ -487,19 +596,19 @@ namespace Project8.Controllers
 
             var semisteres = db.semesters;
             int current = 1;
-            bool test = true;
+
             foreach (var semester in semisteres)
             {
                 if (semester.end_date > DateTime.Now.Date && semester.start_date < DateTime.Now.Date)
                 {
                     current = semester.id;
-                    test = false;
+
                 }
             }
             var currentregestered = db.Enrollments.Where(x => x.semester_id == current && x.Student_id == userid).Include(x => x.Courses_Offered.Cours).Include(x => x.Courses_Offered).ToList();
 
             var registerednow = db.Enrollments.Where(x => x.Student_id == userid && x.semester_id == current);
-           
+
             if (delete != null)
             {
                 var enroll = db.Enrollments.Find(delete);
@@ -518,7 +627,7 @@ namespace Project8.Controllers
             var selectedcourse = db.Courses_Offered.Find(Course_id);
             if (selectedcourse == null)
             {
-                TempData["swal_message"] = $"There is no Courses in the schedual with this id ";
+                TempData["swal_message"] = $"There is no course in the schedule with this ID ";
                 ViewBag.title = "Error";
                 ViewBag.icon = "warning";
                 return View(currentregestered);
@@ -532,7 +641,7 @@ namespace Project8.Controllers
             }
             if (counthours + selectedcourse.Cours.Number_Of_Hours > 18)
             {
-                TempData["swal_message"] = $"You can't register more than 18 houre per semester ";
+                TempData["swal_message"] = $"You cannot register for more than 18 credit hours per semester.";
                 ViewBag.title = "Error";
                 ViewBag.icon = "warning";
                 return View(currentregestered);
@@ -543,8 +652,15 @@ namespace Project8.Controllers
             int hourenumber = Convert.ToInt32(selectedcourse.Cours.Number_Of_Hours);
 
             int combalance = 9 * Convert.ToInt32(logstudent.Major.Price);
-            var coursesoffered = db.Courses_Offered.Where(x => x.semester_id == current && x.Cours.Major_Id == logstudent.Major_Id);
+            var coursesoffered = db.Courses_Offered.Where(x => x.semester_id == current && x.Cours.Major_Id == logstudent.Major_Id).ToList();
             bool ex1 = false;
+            if (selectedcourse.semester_id != current)
+            {
+                TempData["swal_message"] = $"This course is not available for the current semester.";
+                ViewBag.title = "Error";
+                ViewBag.icon = "warning";
+                return View(currentregestered);
+            }
             foreach (var courses in coursesoffered)
             {
                 if (courses.course_id == selectedcourse.course_id)
@@ -555,7 +671,7 @@ namespace Project8.Controllers
             }
             if (!ex1)
             {
-                TempData["swal_message"] = $"This course belong to other major";
+                TempData["swal_message"] = $"This course is not available for your major.";
                 ViewBag.title = "Error";
                 ViewBag.icon = "warning";
                 return View(currentregestered);
@@ -564,33 +680,38 @@ namespace Project8.Controllers
             {
                 if (item.Courses_Offered.course_id == selectedcourse.Cours.Course_Id)
                 {
-                    TempData["swal_message"] = $"You already have this course ";
+                    TempData["swal_message"] = $"You have already registered for this course";
                     ViewBag.title = "Error";
                     ViewBag.icon = "warning";
                     return View(currentregestered);
                 }
-                if (selectedcourse.start_time < item.Courses_Offered.end_time && selectedcourse.end_time > item.Courses_Offered.start_time && selectedcourse.Days_id == item.Courses_Offered.Days_id)
+                if (item.Courses_Offered.Days_id != selectedcourse.Days_id)
                 {
-                    TempData["swal_message"] = $"Partial overlapping occured  ";
+                    break;
+                }
+                if (selectedcourse.start_time == item.Courses_Offered.start_time || selectedcourse.end_time == item.Courses_Offered.end_time && selectedcourse.Days_id == item.Courses_Offered.Days_id)
+                {
+                    TempData["swal_message"] = $"There is a complete overlap with one of your registered courses. ";
+                    ViewBag.title = "Error";
+                    ViewBag.icon = "warning";
+                    return View(currentregestered);
+                }
+                else if (selectedcourse.start_time < item.Courses_Offered.end_time && selectedcourse.end_time > item.Courses_Offered.start_time && selectedcourse.Days_id == item.Courses_Offered.Days_id)
+                {
+                    TempData["swal_message"] = $"There is a partial overlap with one of your registered courses.  ";
                     ViewBag.title = "Error";
                     ViewBag.icon = "warning";
                     return View(currentregestered);
                 }
 
-                else if (selectedcourse.start_time == item.Courses_Offered.start_time || selectedcourse.end_time == item.Courses_Offered.end_time && selectedcourse.Days_id == item.Courses_Offered.Days_id)
-                {
-                    TempData["swal_message"] = $"complete overlapping occured  ";
-                    ViewBag.title = "Error";
-                    ViewBag.icon = "warning";
-                    return View(currentregestered);
-                }
+
 
 
             }
 
             if (logstudent.Balance < hourenumber * hourprice)
             {
-                TempData["swal_message"] = $"You dont have the enofh balance that is requiered for registration this course you should add   {hourenumber * hourprice - logstudent.Balance} ";
+                TempData["swal_message"] = $"Your current balance is not sufficient to register for this course. You need to add  {hourenumber * hourprice - logstudent.Balance} to your account ";
                 ViewBag.title = "Error";
                 ViewBag.icon = "warning";
                 return View(currentregestered);
@@ -598,7 +719,7 @@ namespace Project8.Controllers
 
             if (selectedcourse.Registered >= selectedcourse.Capacity)
             {
-                TempData["swal_message"] = $"This course is full ";
+                TempData["swal_message"] = $"This course is already full. ";
                 ViewBag.title = "Error";
                 ViewBag.icon = "warning";
                 return View(currentregestered);
@@ -621,7 +742,7 @@ namespace Project8.Controllers
                 }
                 if (!ex)
                 {
-                    TempData["swal_message"] = $"you dont have the prerequirement which is {dependentcourse.Course_Name} ";
+                    TempData["swal_message"] = $"You do not have the prerequisite requirement for this course, which is {dependentcourse.Course_Name} ";
                     ViewBag.title = "Error";
                     ViewBag.icon = "warning";
                     return View(currentregestered);
@@ -640,7 +761,7 @@ namespace Project8.Controllers
             int counter = Convert.ToInt32(selectedcourse.Registered);
             selectedcourse.Registered = counter + 1;
             db.SaveChanges();
-            TempData["swal_message"] = $"you dont have registered this course successfully ";
+            TempData["swal_message"] = $"you  have registered this course successfully ";
             ViewBag.title = "success";
             ViewBag.icon = "success";
             var currentregestered2 = db.Enrollments.Where(x => x.semester_id == current && x.Student_id == userid).Include(x => x.Courses_Offered.Cours).Include(x => x.Courses_Offered).ToList();
